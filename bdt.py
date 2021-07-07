@@ -102,12 +102,6 @@ def run(file, result_column):
         first_value = (df[column].iloc[0])
         if isinstance(first_value, (int, float, np.int64, bool)):
             num_attributes.append(column)
-        else:
-            try:
-                df[column] = df[column].apply(lambda x: ast.literal_eval(str(x)))
-                num_attributes.append(column)
-            except:
-                pass
 
     num_attributes = [i for i in num_attributes if i not in result_column]
     print(num_attributes)
