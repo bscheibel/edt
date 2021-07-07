@@ -24,6 +24,8 @@ E.g.: "python edt.py files/out.csv res"
  
 Input file has to be a Dataframe, each row corresponds to one trace. Conversion from an XES event log to dataframe can be done using PM4PY (https://pm4py.fit.fraunhofer.de/)
 
+Dataset for the running example can be found under: files/out.csv
+
 Running Example: \
     file="files/out.csv" \
     result_column = "res" \
