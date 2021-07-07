@@ -4,10 +4,11 @@ import pandas as pd
 import numpy as np
 import re
 import ast
+import sys
 import tree_code as tc
 
 
-def create_features(df, result, names):
+def create_features(df, result_column, names):
     new_names = []
     df_new = df
     comparison_operators = ['==', '!=','<', '>', '<=', '>=']
@@ -25,9 +26,7 @@ def create_features(df, result, names):
     return df, new_names
 
 
-def if_synthetic():
-    file = "files/out.csv"
-    result_column = "res"
+def if_synthetic(file, result_column):
     df = pd.read_csv(file)
     num_attributes = []
     for column in df:
@@ -37,13 +36,10 @@ def if_synthetic():
     num_attributes = [i for i in num_attributes if i not in result_column]
     run(df,result_column, num_attributes)
 
-def define():
-    file = "files/bpi17_log.csv"
-    result_column = "Accepted"
-    #file = "files/permit_log.csv"
-    #result_column = "Overspent"
-    #file="files/out.csv"
-    #result_column = "res"
+def define(file, result_column):
+    if(file == "files/out.csv"):
+        if_synthetic(file, result_column)
+
     df = pd.read_csv(file)
 
     df = df.fillna(False)
@@ -68,18 +64,17 @@ def define():
     run(df,result_column, num_attributes)
 
 def run(df, result_column, names):
-    old = True
-    tc.learn_tree(df, result_column, names, old)
     if(isinstance(result_column, (int, float))):
         df[result_column] = df[result_column].map(tc.int_to_string)
     df, new_names = create_features(df, result_column, names)
     df.to_csv('files/temp.csv', index=False)  # , header = None)
     important_feat = new_names
-    tc.learn_tree(df, result_column, important_feat, not old)
+    tc.learn_tree(df, result_column, important_feat)
 
 
 if __name__ == "__main__":
-    #if_synthetic()
-    define()
+    file = sys.argv[1]
+    res = sys.argv[2]
+    define(file, res)
 
 
